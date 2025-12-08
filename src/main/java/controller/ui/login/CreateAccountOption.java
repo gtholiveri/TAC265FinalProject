@@ -23,7 +23,7 @@ public class CreateAccountOption extends MenuOption {
     @Override
     public void fire() {
         // TODO: implement create account fire() method
-        Printer.println("Create account to be implemented!");
+        Printer.clearPrintln("Create account to be implemented!");
         app.stall();
     }
 

@@ -20,7 +20,7 @@ public class LoginOption extends MenuOption {
     @Override
     public void fire() {
         // TODO: implement login fire() method
-        Printer.println("Login to be implemented!");
+        Printer.clearPrintln("Login to be implemented!");
         app.stall();
     }
 

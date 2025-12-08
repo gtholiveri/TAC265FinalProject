@@ -17,7 +17,7 @@ public class ExitOption extends MenuOption {
     public void fire() {
         // TODO: implement exit fire() method
         // TODO: implement the exit method in PageRankApp
-        Printer.println("Exit to be implemented!");
+        Printer.clearPrintln("Exit to be implemented!");
         app.stall();
     }
 
