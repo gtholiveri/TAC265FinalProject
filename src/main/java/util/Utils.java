@@ -29,6 +29,9 @@ public class Utils {
         return seconds / 60.0;
     }
 
+    /**
+     * @return true if {@code index} is within the range [0, {@code size})
+     */
     public static boolean validIndex(int index, int size) {
         return index >= 0 && index < size;
     }
