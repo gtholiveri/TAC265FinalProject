@@ -34,7 +34,7 @@ public class InputListener implements NativeKeyListener {
     @Override
     public void nativeKeyPressed(NativeKeyEvent event) {
         Printer.println("KEY PRESSED (" + getKeyText(event.getKeyCode()) + ")");
-        app.handleKey(getKeyText(event.getKeyCode()));
+        app.queueInput(getKeyText(event.getKeyCode()));
     }
 
 
