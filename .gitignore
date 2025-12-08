@@ -47,3 +47,4 @@ bin/
 settings.gradle.kts
 gradlew.bat
 gradlew
+/log.txt
