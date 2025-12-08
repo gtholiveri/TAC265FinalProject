@@ -47,4 +47,5 @@ bin/
 settings.gradle.kts
 gradlew.bat
 gradlew
-/log.txt
+/journal/log1.txt
+/journal/*
