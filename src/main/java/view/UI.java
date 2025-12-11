@@ -29,8 +29,8 @@ public interface UI {
     boolean readYesOrNo(String prompt);
 
     // Input Strings / reference types
-    String readln(String prompt);
-    String readln(String prompt, String... matches);
+    String readStr(String prompt);
+    String readStr(String prompt, String... matches);
     Object chooseFrom(String prompt, Object... options);
     String readLnNotEmpty(String prompt);
 

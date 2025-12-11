@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 /**
  * MyIO -- a small input/output helper that wraps Scanner
- * and does robust error checking for user input.
- *
+ * and does robust error checking for user input.<br><br>
+ * <p>
  * This avoids depending on any preview language features,
  * so it works fine on standard Java versions (17, 21, 25, etc.).
  *
@@ -19,10 +19,31 @@ import java.util.Scanner;
  */
 public class TerminalUI implements UI {
 
-    private final Scanner sc;
+    private Scanner sc;
 
     public TerminalUI() {
         sc = new Scanner(System.in); // single shared Scanner for System.in
+    }
+
+    /**
+     * Drains any buffered input from System.in to prevent ghost keypresses
+     * from the native key hook from interfering with Scanner input.
+     */
+    private void drainBuffer() {
+        try {
+            System.out.println("wait...");
+            Thread.sleep(2000);
+            System.out.println("go");
+            for (int i = 0; i < 5; i++) {
+                sc.nextLine();
+            }
+        } catch (InterruptedException e) {
+            System.err.println("Interrupted while draining buffer.");
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            System.err.println("Nothing in buffer");
+            // If draining fails, just continue - not critical
+        }
     }
 
     /**
@@ -31,14 +52,16 @@ public class TerminalUI implements UI {
      * @param prompt The question to ask the user
      * @return whatever the user types before pressing Enter
      */
-    public String readln(String prompt) {
-        print(prompt + " > ");
+    public String readStr(String prompt) {
+        sc = new Scanner(System.in);
+        print(prompt);
+        drainBuffer();
         return sc.nextLine();
     }
 
     public String readLnNotEmpty(String prompt) {
         while (true) {
-            String response = readln(prompt).trim();
+            String response = readStr(prompt).trim();
 
             if (!response.isEmpty()) {
                 return response;
@@ -70,11 +93,12 @@ public class TerminalUI implements UI {
      * @return the int value the user types in
      */
     public int readInt(String prompt) {
-        print(prompt + " > ");
+        drainBuffer();
+        print(prompt);
         while (!sc.hasNextInt()) {
             String garbage = sc.nextLine(); // grab the "bad data"
             System.err.println(garbage + " was not an int.");
-            print(prompt + " > ");
+            print(prompt);
         }
         int num = sc.nextInt();      // grab the number
         sc.nextLine();               // consume the rest of the line
@@ -82,11 +106,12 @@ public class TerminalUI implements UI {
     }
 
     public long readLong(String prompt) {
-        print(prompt + " > ");
+        drainBuffer();
+        print(prompt);
         while (!sc.hasNextLong()) {
             String garbage = sc.nextLine(); // grab the "bad data"
             System.err.println(garbage + " was not a long.");
-            print(prompt + " > ");
+            print(prompt);
         }
         long num = sc.nextLong();      // grab the number
         sc.nextLine();               // consume the rest of the line
@@ -113,20 +138,21 @@ public class TerminalUI implements UI {
     /**
      * Method readInt: gets an int value between min and max (inclusive) based on user input.
      *
-     * @param prompt The question to ask the user
-     * @param minValue The min allowed int value for the user input (inclusive)
-     * @param maxValue The max allowed int value for the user input (inclusive)
+     * @param prompt    The question to ask the user
+     * @param minValue  The min allowed int value for the user input (inclusive)
+     * @param maxValue  The max allowed int value for the user input (inclusive)
      * @param quitValue The max allowed int value for the user input (inclusive)
      * @return an int between [min, max]  or equal to the quitValue
      */
     public int readInt(String prompt, int minValue, int maxValue, int quitValue) {
         int num = readInt(prompt); //get a number
-        while (! ( num >= minValue && num <= maxValue) || num == quitValue){
+        while (!(num >= minValue && num <= maxValue) || num == quitValue) {
             System.err.println(num + " is invalid, Choose a num " + minValue + " to " + maxValue + " or " + quitValue + " for quit");
             num = readInt(prompt); //get a new number
         }
         return num;
     }
+
     /**
      * Read a double value from the user, with error checking.
      *
@@ -134,11 +160,12 @@ public class TerminalUI implements UI {
      * @return the double value the user types in
      */
     public double readDouble(String prompt) {
-        print(prompt + " > ");
+        drainBuffer();
+        print(prompt);
         while (!sc.hasNextDouble()) {
             String garbage = sc.nextLine(); // grab the "bad data"
             System.err.println(garbage + " was not a double.");
-            print(prompt + " > ");
+            print(prompt);
         }
         double num = sc.nextDouble();
         sc.nextLine(); // clear the input buffer
@@ -164,12 +191,12 @@ public class TerminalUI implements UI {
      * @return true for yes/y, false for no/n
      */
     public boolean readYesOrNo(String prompt) {
-        String answer = readln(prompt + " (yes/no) > ").toLowerCase();
+        String answer = readStr(prompt + " (yes/no) > ").toLowerCase();
 
         while (!(answer.equals("yes") || answer.equals("y")
                 || answer.equals("no") || answer.equals("n"))) {
             System.err.println(answer + " is invalid.");
-            answer = readln(prompt + " (yes/no) > ").toLowerCase();
+            answer = readStr(prompt + " (yes/no) > ").toLowerCase();
         }
 
         return answer.equals("yes") || answer.equals("y");
@@ -179,10 +206,10 @@ public class TerminalUI implements UI {
      * Read a boolean ("true" or "false"), looping until valid.
      */
     public boolean readBoolean(String prompt) {
-        String userInput = readln(prompt).toLowerCase();
+        String userInput = readStr(prompt).toLowerCase();
         while (!(userInput.equals("true") || userInput.equals("false"))) {
             System.err.println(userInput + " is invalid. Must specificType \"true\" or \"false\".");
-            userInput = readln(prompt).toLowerCase();
+            userInput = readStr(prompt).toLowerCase();
         }
         return userInput.equals("true");
     }
@@ -196,26 +223,30 @@ public class TerminalUI implements UI {
      * @return a String that matches one of the options (case-insensitive)
      */
     public String readString(String prompt, String... options) {
-        String response = readln(prompt + " > ");
+        String response = readStr(prompt);
 
         while (contains(response, options) == -1) {
             System.err.println(response + " is not a valid option. Choose from " + Arrays.toString(options));
-            response = readln(prompt + " > ");
+            response = readStr(prompt);
         }
         return response;
     }
 
-    /** Alias for readString with String options. */
-    public String readln(String prompt, String... options) {
+    /**
+     * Alias for readString with String options.
+     */
+    public String readStr(String prompt, String... options) {
         return readString(prompt, options);
     }
 
-    /** Version that takes Object options but still returns the chosen text. */
-    public String readln(String prompt, Object... options) {
-        String response = readln(prompt + " > ");
+    /**
+     * Version that takes Object options but still returns the chosen text.
+     */
+    public String readStr(String prompt, Object... options) {
+        String response = readStr(prompt);
         while (contains(response, options) == -1) {
             System.err.println(response + " is not a valid option. Choose from " + Arrays.toString(options));
-            response = readln(prompt + " > ");
+            response = readStr(prompt);
         }
         return response;
     }
@@ -250,25 +281,26 @@ public class TerminalUI implements UI {
         return index;
     }
 
- 
+
     /**
      * Allows the user to select from a variety of options.
+     *
      * @param prompt
      * @param options
      * @return
      */
-    public Object chooseFrom(String prompt, Object... options){
+    public Object chooseFrom(String prompt, Object... options) {
         String choices = "";
-        for(int i = 1; i<= options.length; i++){
-            choices  += i + ": " + options[i-1].toString() + "\n";
+        for (int i = 1; i <= options.length; i++) {
+            choices += i + ": " + options[i - 1].toString() + "\n";
         }
-        int num = readInt(choices + "\n" + prompt, 1, options.length+1);
-        return options[num-1];
+        int num = readInt(choices + "\n" + prompt, 1, options.length + 1);
+        return options[num - 1];
     }
 
     /**
      * Read a valid date (year, month, day) from the user.
-     *
+     * <p>
      * Uses YearMonth to ensure the day is valid for the given month/year.
      */
     public LocalDate readDate(String prompt) {
