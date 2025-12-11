@@ -5,11 +5,13 @@ import java.util.List;
 
 import static util.Utils.validIndex;
 
-public abstract class Menu implements Displayable {
+public abstract class Menu implements Labeled {
+    protected String label;
     protected PageRankApp app;
     protected List<MenuOption> options;
 
-    public Menu(PageRankApp app) {
+    public Menu(PageRankApp app, String label) {
+        this.label = label;
         this.app = app;
         options = new ArrayList<>();
         addOptions();
@@ -26,12 +28,8 @@ public abstract class Menu implements Displayable {
     }
     
     @Override
-    public String getDisplay() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < options.size(); i++) {
-            sb.append("(").append(i + 1).append(") ").append(options.get(i).getDisplay()).append("\n");
-        }
-        return sb.toString();
+    public String getLabel() {
+        return label;
     }
 
     /**
@@ -48,5 +46,9 @@ public abstract class Menu implements Displayable {
             // not a number
             return false;
         }
+    }
+
+    public List<MenuOption> getOptions() {
+        return options;
     }
 }

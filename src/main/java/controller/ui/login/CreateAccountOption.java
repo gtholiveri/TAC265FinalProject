@@ -7,7 +7,7 @@ import view.Printer;
 public class CreateAccountOption extends MenuOption {
 
     public CreateAccountOption(PageRankApp app) {
-        super(app);
+        super(app, "Create new account");
     }
 
     /**
@@ -25,10 +25,5 @@ public class CreateAccountOption extends MenuOption {
         // TODO: implement create account fire() method
         Printer.clearPrintln("Create account to be implemented!");
         app.stall();
-    }
-
-    @Override
-    public String getDisplay() {
-        return "Create new account";
     }
 }

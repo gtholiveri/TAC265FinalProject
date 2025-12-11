@@ -2,13 +2,14 @@ package controller.ui.login;
 
 import controller.ui.MenuOption;
 import controller.ui.PageRankApp;
+import controller.ui.main.MainMenu;
 import view.Printer;
 
 public class LoginOption extends MenuOption {
 
 
     public LoginOption(PageRankApp app) {
-        super(app);
+        super(app, "Log in");
     }
 
     /**
@@ -20,12 +21,23 @@ public class LoginOption extends MenuOption {
     @Override
     public void fire() {
         // TODO: implement login fire() method
-        Printer.clearPrintln("Login to be implemented!");
-        app.stall();
-    }
+        Printer.clearPrintln("Enter username:");
+        String username = app.ui.readStr("");
 
-    @Override
-    public String getDisplay() {
-        return "Login";
+        if (!app.userExists(username)) {
+            Printer.println("No users with that username. Try again or create an account.");
+            app.stall();
+            return;
+        }
+
+        String password = app.ui.readStr("Enter password: ");
+
+        if (app.checkPassword(username, password)) {
+            Printer.clearPrintln("Welcome, " + username);
+            app.stall();
+            app.transitionTo(new MainMenu(app));
+        } else {
+            Printer.println("Incorrect password. Try logging in again.");
+        }
     }
 }

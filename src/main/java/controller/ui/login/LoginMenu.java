@@ -7,7 +7,7 @@ public class LoginMenu extends Menu {
 
 
     public LoginMenu(PageRankApp app) {
-        super(app);
+        super(app, "Log in or create an account to continue");
     }
 
     @Override

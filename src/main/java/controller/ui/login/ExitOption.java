@@ -6,7 +6,7 @@ import view.Printer;
 
 public class ExitOption extends MenuOption {
     public ExitOption(PageRankApp app) {
-        super(app);
+        super(app, "Exit application");
     }
 
     /**
@@ -15,14 +15,7 @@ public class ExitOption extends MenuOption {
      */
     @Override
     public void fire() {
-        // TODO: implement exit fire() method
-        // TODO: implement the exit method in PageRankApp
-        Printer.clearPrintln("Exit to be implemented!");
-        app.stall();
+        app.exit();
     }
 
-    @Override
-    public String getDisplay() {
-        return "Exit application";
-    }
 }

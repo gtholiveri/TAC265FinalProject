@@ -1,20 +1,32 @@
 package controller.ui;
 
 import controller.ui.login.LoginMenu;
-import view.InputListener;
-import view.Printer;
+import controller.ui.main.MainMenu;
+import model.user.User;
+import view.*;
 
+import java.util.EnumSet;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import static controller.ui.AppState.*;
+import static model.persistence.UserDatabaseManager.readAllUsers;
+import static view.TextFormat.BOLD;
+import static view.TextFormat.ITALIC;
+
 
 public class PageRankApp {
     private Menu currMenu;
 
-    private AppState state = AppState.WAITING_FOR_INPUT;
-
+    private Map<String, User> users;
     private BlockingQueue<String> inputQueue;
+
+    public UI ui = new TerminalUI();
+    private boolean shouldExit = false;
+
+    private User currentUser = null;
+    private MenuRenderer renderer = new TerminalMenuRenderer();
+    private InputListener inputListener;
 
     public static void main(String[] args) {
         PageRankApp app = new PageRankApp();
@@ -24,10 +36,10 @@ public class PageRankApp {
 
     public PageRankApp() {
         currMenu = new LoginMenu(this);
-        new InputListener(this);
+        inputListener = new InputListener(this);
 
+        users = readAllUsers();
         inputQueue = new ArrayBlockingQueue<>(1);
-
     }
 
     /**
@@ -36,12 +48,20 @@ public class PageRankApp {
      * - wait for user input<br>
      */
     public void execute() {
-        Printer.println("Welcome to PageRank, the competitive reading app!");
+        Printer.printlnFormatted("Welcome to PageRank, the competitive reading app!", EnumSet.of(BOLD));
         stall();
-        while (state != EXIT) {
-            Printer.clearPrintln(currMenu.getDisplay());
+        while (!shouldExit) {
+            refreshScreen();
             waitForInput();
         }
+
+        Printer.clearPrint("");
+        Printer.printFormatted("Thanks for using PageRank!", EnumSet.of(BOLD, ITALIC));
+    }
+
+
+    public void refreshScreen() {
+        renderer.render(currMenu);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -50,8 +70,6 @@ public class PageRankApp {
     }
 
     private void waitForInput() {
-        state = WAITING_FOR_INPUT;
-
         try {
             // block until we get some input that is valid
             String input = "";
@@ -62,7 +80,7 @@ public class PageRankApp {
             // once we get valid input, fire the menu off of that
             // this might be fragile or there might be a cleaner way to do this but I think it's fairly readable
             currMenu.fire(Integer.parseInt(input));
-            
+
         } catch (InterruptedException e) {
             System.err.println("Interrupted while waiting for input.");
             throw new RuntimeException(e);
@@ -70,8 +88,9 @@ public class PageRankApp {
     }
 
     public void stall() {
+        inputQueue.clear(); // necessary to remove anything that already is in there
+        // which would instantly skip us past the stall
         Printer.println("Press anything to continue.");
-        state = STALLING;
 
         try {
             // block until we get some input, doesn't matter what it is
@@ -81,5 +100,41 @@ public class PageRankApp {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void exit() {
+        shouldExit = true;
+        inputListener.close();
+    }
+
+    public boolean userExists(String username) {
+        return users.containsKey(username);
+    }
+
+    /**
+     * 
+     * @param username
+     * @param password
+     * @return
+     */
+    public boolean checkPassword(String username, String password) {
+        if (!userExists(username)) {
+            throw new RuntimeException("This shouldn't be possible: login attempted for nonexistent user.");
+        }
+        User u = users.get(username);
+
+        return u.checkPassword(password);
+    }
+
+    public User getCurrentUser() {
+        if (currentUser == null) {
+            throw new RuntimeException("getCurrentUser() called when currentUser null");
+        }
+
+        return currentUser;
+    }
+
+    public void transitionTo(Menu newMenu) {
+        currMenu = newMenu;
     }
 }

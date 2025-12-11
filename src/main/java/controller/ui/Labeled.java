@@ -6,6 +6,6 @@ package controller.ui;
  * have a very heterogeneous set of elements, has pagination nonsense etc so idk<br>
  * For now it's just a fancy label
  */
-public interface Displayable {
-    public String getDisplay();
+public interface Labeled {
+    String getLabel();
 }
