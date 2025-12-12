@@ -1,12 +1,11 @@
-package view;
+package view.old;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
-import controller.ui.PageRankApp;
+import controller.actions.PageRankApp;
 
-import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,10 +14,10 @@ import static com.github.kwhat.jnativehook.keyboard.NativeKeyEvent.getKeyText;
 
 
 public class InputListener implements NativeKeyListener {
-    private final PageRankApp app;
-
-    public InputListener(PageRankApp app) {
-        this.app = app;
+    private PageRankApp app;
+    
+    public InputListener() {
+        app = PageRankApp.getInstance();
 
         try {
             GlobalScreen.registerNativeHook(); // turns on the library's central listener
@@ -34,7 +33,7 @@ public class InputListener implements NativeKeyListener {
     @Override
     public void nativeKeyPressed(NativeKeyEvent event) {
 //        Printer.println("KEY PRESSED (" + getKeyText(event.getKeyCode()) + ")");
-        app.queueInput(getKeyText(event.getKeyCode()));
+//        app.queueInput(getKeyText(event.getKeyCode()));
     }
 
 

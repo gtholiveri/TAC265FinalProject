@@ -1,16 +1,8 @@
-package controller.ui.login;
+package controller.actions.title;
 
-import controller.ui.MenuOption;
-import controller.ui.PageRankApp;
-import controller.ui.main.MainMenu;
-import view.Printer;
+import controller.actions.PageRankApp;
 
-public class LoginOption extends MenuOption {
-
-
-    public LoginOption(PageRankApp app) {
-        super(app, "Log in");
-    }
+public class LoginAction implements Runnable {
 
     /**
      * - Clears the screen<br>
@@ -19,8 +11,14 @@ public class LoginOption extends MenuOption {
      * - Otherwise, display an error message and confirm before continuing
      */
     @Override
-    public void fire() {
-        // TODO: implement login fire() method
+    public void run() {
+        //TODO refactor this to switch to a login dialog
+        PageRankApp app = PageRankApp.getInstance();
+
+        app.transitionTo(LoginDialogBuilder.build());
+
+
+        /*
         Printer.clearPrintln("Enter username:");
         String username = app.ui.readStr("");
 
@@ -38,6 +36,6 @@ public class LoginOption extends MenuOption {
             app.transitionTo(new MainMenu(app));
         } else {
             Printer.println("Incorrect password. Try logging in again.");
-        }
+        }*/
     }
 }

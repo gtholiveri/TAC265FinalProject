@@ -1,4 +1,4 @@
-package controller.ui;
+package controller.actions;
 
 
 public abstract class MenuOption implements Labeled {

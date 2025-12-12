@@ -1,6 +1,6 @@
-package view;
+package view.old;
 
-import controller.ui.Menu;
+import controller.actions.Menu;
 
 public interface MenuRenderer {
     public void render(Menu menu);

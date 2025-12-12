@@ -1,13 +1,13 @@
-package view;
+package view.old;
 
-import controller.ui.Menu;
-import controller.ui.MenuOption;
+import controller.actions.Menu;
+import controller.actions.MenuOption;
 
 import java.util.EnumSet;
 import java.util.List;
 
-import static view.TextFormat.BOLD;
-import static view.TextFormat.ITALIC;
+import static view.old.TextFormat.BOLD;
+import static view.old.TextFormat.ITALIC;
 
 public class TerminalMenuRenderer implements MenuRenderer {
     @Override

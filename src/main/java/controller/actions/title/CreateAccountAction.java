@@ -1,14 +1,6 @@
-package controller.ui.login;
+package controller.actions.title;
 
-import controller.ui.MenuOption;
-import controller.ui.PageRankApp;
-import view.Printer;
-
-public class CreateAccountOption extends MenuOption {
-
-    public CreateAccountOption(PageRankApp app) {
-        super(app, "Create new account");
-    }
+public class CreateAccountAction implements Runnable {
 
     /**
      * - Clears the screen<br>
@@ -21,9 +13,7 @@ public class CreateAccountOption extends MenuOption {
      * - Transition to the main menu
      */
     @Override
-    public void fire() {
-        // TODO: implement create account fire() method
-        Printer.clearPrintln("Create account to be implemented!");
-        app.stall();
+    public void run() {
+        // TODO: implement create account run() method
     }
 }

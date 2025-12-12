@@ -1,7 +1,7 @@
 package model.persistence;
 
 import model.user.User;
-import view.Printer;
+import view.old.Printer;
 
 import java.io.*;
 import java.util.HashMap;
@@ -30,14 +30,12 @@ public class UserDatabaseManager {
                 //noinspection unchecked
                 users = (Map<String, User>) obj; // if the thing we read was in fact a map, cast it and store it
             }
-        } catch (Exception e) {
-            //can ignore exception if no file found
-            // System.err.println("Error caught in readAllUsers: " + e);
+        } catch (FileNotFoundException e) {
+            //can ignore exception if no file found, since that just means we'll return a blank map
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
-        if (users.isEmpty()) {
-            Printer.println("No existing database file. Blank set of users instantiated.");
-        }
 
         return users;
     }

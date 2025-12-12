@@ -1,4 +1,4 @@
-package controller.ui;
+package controller.actions;
 
 /**
  * Interface for objects that can be displayed to the user in some way.

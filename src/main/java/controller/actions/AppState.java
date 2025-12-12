@@ -1,4 +1,4 @@
-package controller.ui;
+package controller.actions;
 
 /**
  * Not using this anymore, since the
