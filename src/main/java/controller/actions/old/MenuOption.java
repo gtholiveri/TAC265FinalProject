@@ -1,5 +1,7 @@
-package controller.actions;
+package controller.actions.old;
 
+
+import controller.actions.PageRankApp;
 
 public abstract class MenuOption implements Labeled {
     protected PageRankApp app;

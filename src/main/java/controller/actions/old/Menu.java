@@ -1,4 +1,6 @@
-package controller.actions;
+package controller.actions.old;
+
+import controller.actions.PageRankApp;
 
 import java.util.ArrayList;
 import java.util.List;

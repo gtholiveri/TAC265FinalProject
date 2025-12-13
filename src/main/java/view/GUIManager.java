@@ -15,6 +15,7 @@ import java.util.List;
 
 public class GUIManager {
     private MultiWindowTextGUI gui;
+    private Window currWindow;
 
     public GUIManager() {
         TerminalFactory tf = new DefaultTerminalFactory();
@@ -36,23 +37,42 @@ public class GUIManager {
             throw new RuntimeException(e);
         }
 
+        currWindow = TitleMenuFactory.create();
     }
 
     public void start() {
-        gui.addWindow(TitleMenuFactory.create());
+        // 1. Add the first window (Non-blocking add)
+        gui.addWindow(currWindow);
+
+        // 2. The Main Loop: Keep running while any window is open
+        while (!gui.getWindows().isEmpty()) {
+            // Pick one of the active windows (doesn't matter which one)
+            Window w = gui.getWindows().iterator().next();
+
+            // Block the main thread here until that specific window closes
+            gui.waitForWindowToClose(w);
+        }
+        // If we get here, no windows are left, so the app exits gracefully.
     }
 
-
     public void stop() {
-
+        gui.getWindows().iterator().forEachRemaining(Window::close);
     }
 
     public void transitionTo(Window newWindow) {
-        for (Window w : List.copyOf(gui.getWindows())) {
-            // copy because we don't want to concurrently modify the list inside the gui
-            // since it may automatically try to remove elements from the list as we iterate
-            w.close();
-        }
+        // 1. Add the new window to the GUI (it appears immediately)
         gui.addWindow(newWindow);
+
+        // 2. Close the old window
+        if (currWindow != null) {
+            currWindow.close();
+        }
+
+        // 3. Update your reference
+        currWindow = newWindow;
+    }
+
+    public MultiWindowTextGUI getGUI() {
+        return gui;
     }
 }

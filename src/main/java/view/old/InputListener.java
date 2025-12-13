@@ -15,7 +15,7 @@ import static com.github.kwhat.jnativehook.keyboard.NativeKeyEvent.getKeyText;
 
 public class InputListener implements NativeKeyListener {
     private PageRankApp app;
-    
+
     public InputListener() {
         app = PageRankApp.getInstance();
 

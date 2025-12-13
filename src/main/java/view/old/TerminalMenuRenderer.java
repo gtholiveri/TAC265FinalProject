@@ -1,7 +1,7 @@
 package view.old;
 
-import controller.actions.Menu;
-import controller.actions.MenuOption;
+import controller.actions.old.Menu;
+import controller.actions.old.MenuOption;
 
 import java.util.EnumSet;
 import java.util.List;

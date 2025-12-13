@@ -1,11 +1,9 @@
 package view.menu;
 
 import com.googlecode.lanterna.gui2.Window;
-import com.googlecode.lanterna.gui2.dialogs.ActionListDialog;
-import com.googlecode.lanterna.gui2.dialogs.ActionListDialogBuilder;
 import controller.actions.title.CreateAccountAction;
 import controller.actions.title.ExitAction;
-import controller.actions.title.LoginAction;
+import controller.actions.title.LoginMenuAction;
 
 public class TitleMenuFactory {
 
@@ -14,7 +12,7 @@ public class TitleMenuFactory {
         String subtitle = "Log in or create an account to continue.";
         OptionListWindowBuilder b = new OptionListWindowBuilder(title, subtitle);
 
-        b.addAction("Log In", new LoginAction());
+        b.addAction("Log In", new LoginMenuAction());
         b.addAction("Create New Account", new CreateAccountAction());
         b.addAction("Exit", new ExitAction());
 

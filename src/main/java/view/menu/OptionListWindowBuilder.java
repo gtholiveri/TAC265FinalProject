@@ -15,7 +15,7 @@ public class OptionListWindowBuilder {
     public OptionListWindowBuilder(String title, String subtitle) {
         this.window = new BasicWindow(title);
         //noinspection ArraysAsListWithZeroOrOneArgument
-        this.window.setHints(Arrays.asList(Window.Hint.FULL_SCREEN));
+        this.window.setHints(Arrays.asList(Window.Hint.EXPANDED));
 
         this.panel = new Panel(new LinearLayout(Direction.VERTICAL));
 //        panel.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Beginning));
