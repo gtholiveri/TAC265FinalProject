@@ -1,4 +1,4 @@
-package controller.actions.title;
+package controller.exceptions;
 
 public class IncorrectPasswordException extends RuntimeException {
     public IncorrectPasswordException(String message) {

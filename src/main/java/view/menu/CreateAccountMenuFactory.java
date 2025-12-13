@@ -3,16 +3,16 @@ package view.menu;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.gui2.*;
 import controller.PageRankApp;
-import controller.actions.title.LoginSubmitAction;
+import controller.actions.title.CreateAccountSubmitAction;
 
 import java.util.Arrays;
 
-public class LoginMenuFactory {
+public class CreateAccountMenuFactory {
 
     public static Window create() {
         PageRankApp app = PageRankApp.getInstance();
 
-        BasicWindow window = new BasicWindow("Log In");
+        BasicWindow window = new BasicWindow("Create Account");
         window.setHints(Arrays.asList(Window.Hint.EXPANDED));
 
         Panel mainPanel = new Panel(new LinearLayout(Direction.VERTICAL));
@@ -38,7 +38,7 @@ public class LoginMenuFactory {
         // Button panel, just lay them out vertically
         Panel buttonPanel = new Panel(new LinearLayout(Direction.VERTICAL));
 
-        Button loginButton = new Button("Log In", new LoginSubmitAction(usernameBox, passwordBox));
+        Button loginButton = new Button("Create Account", new CreateAccountSubmitAction(usernameBox, passwordBox));
         buttonPanel.addComponent(loginButton);
 
         // Back button
@@ -52,5 +52,6 @@ public class LoginMenuFactory {
 
         window.setComponent(mainPanel);
         return window;
+
     }
 }

@@ -6,7 +6,7 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import controller.actions.PageRankApp;
+import controller.PageRankApp;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,7 +20,33 @@ public class Main {
     }
 
     private static void runApp() {
-        PageRankApp.getInstance().execute();
+        try {
+            PageRankApp.getInstance().execute();
+        } catch (Throwable e) {
+            // Write to a file since Lanterna clears the screen
+            try {
+                java.io.PrintWriter pw = new java.io.PrintWriter("error_log.txt");
+                pw.println("FATAL ERROR at " + java.time.LocalDateTime.now());
+                pw.println("Exception: " + e.getClass().getName());
+                pw.println("Message: " + e.getMessage());
+                pw.println("\nStack trace:");
+                e.printStackTrace(pw);
+                pw.close();
+
+                // Also print to stderr
+                System.err.println("\n\n=== FATAL ERROR ===");
+                System.err.println("Check error_log.txt for details");
+                e.printStackTrace();
+            } catch (Exception logError) {
+                System.err.println("Failed to write error log: " + logError.getMessage());
+            }
+
+            // Keep console open
+            System.err.println("\nPress Enter to exit...");
+            try {
+                System.in.read();
+            } catch (Exception ignored) {}
+        }
     }
     // new SwingTerminal(new TerminalSize(20, 40), null, null, null);
 

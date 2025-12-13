@@ -1,8 +1,9 @@
-package controller.actions;
+package controller;
 
 import com.googlecode.lanterna.gui2.Window;
-import controller.actions.title.IncorrectPasswordException;
-import controller.actions.title.NoSuchUserException;
+import controller.exceptions.IncorrectPasswordException;
+import controller.exceptions.NoSuchUserException;
+import controller.exceptions.UsernameTakenException;
 import model.persistence.UserDatabaseManager;
 import model.user.User;
 import view.GUIManager;
@@ -56,24 +57,6 @@ public class PageRankApp {
         return currentUser;
     }
 
-    public void logInUser(String username, String password) throws NoSuchUserException, IncorrectPasswordException {
-        // nonexistent user
-        if (!userExists(username)) {
-            throw new NoSuchUserException("User does not exist: " + username);
-        }
-
-        // incorrect password
-        if (!checkPassword(username, password)) {
-            throw new IncorrectPasswordException("Incorrect password for user: " + username + " and password: " + password);
-        }
-
-        // correct username and password: log them in
-        this.currentUser = users.get(username);
-
-        // also transition the screen
-        transitionTo(MainMenuFactory.create());
-    }
-
     public User getUser(String username) {
         return users.get(username);
     }
@@ -94,4 +77,35 @@ public class PageRankApp {
     public void execute() {
         guiManager.start();
     }
+
+    public void logInUser(String username, String password) throws NoSuchUserException, IncorrectPasswordException {
+        // nonexistent user
+        if (!userExists(username)) {
+            throw new NoSuchUserException("User does not exist: " + username);
+        }
+
+        // incorrect password
+        if (!checkPassword(username, password)) {
+            throw new IncorrectPasswordException("Incorrect password for user: " + username + " and password: " + password);
+        }
+
+        // correct username and password: log them in
+        this.currentUser = users.get(username);
+
+        // also transition the screen
+        transitionTo(MainMenuFactory.create());
+    }
+
+    public void addUser(User newUser) throws UsernameTakenException {
+        if (userExists(newUser.getUsername())) {
+            throw new UsernameTakenException("User already exists: " + newUser.getUsername());
+        }
+
+        // valid username (and the username and password guaranteed to be non-empty by the action
+        users.put(newUser.getUsername(), newUser);
+        save();
+
+        transitionTo(MainMenuFactory.create());
+    }
+
 }

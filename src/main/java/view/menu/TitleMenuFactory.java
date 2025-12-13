@@ -1,7 +1,8 @@
 package view.menu;
 
 import com.googlecode.lanterna.gui2.Window;
-import controller.actions.title.CreateAccountAction;
+import controller.actions.title.CreateAccountMenuAction;
+import controller.actions.title.CreateAccountSubmitAction;
 import controller.actions.title.ExitAction;
 import controller.actions.title.LoginMenuAction;
 
@@ -13,7 +14,7 @@ public class TitleMenuFactory {
         OptionListWindowBuilder b = new OptionListWindowBuilder(title, subtitle);
 
         b.addAction("Log In", new LoginMenuAction());
-        b.addAction("Create New Account", new CreateAccountAction());
+        b.addAction("Create New Account", new CreateAccountMenuAction());
         b.addAction("Exit", new ExitAction());
 
         return b.build();

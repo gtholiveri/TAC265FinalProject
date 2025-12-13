@@ -1,4 +1,4 @@
-package controller.actions.title;
+package controller.exceptions;
 
 public class NoSuchUserException extends RuntimeException {
     public NoSuchUserException(String message) {

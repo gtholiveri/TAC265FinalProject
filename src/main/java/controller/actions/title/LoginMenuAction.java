@@ -1,6 +1,6 @@
 package controller.actions.title;
 
-import controller.actions.PageRankApp;
+import controller.PageRankApp;
 import view.menu.LoginMenuFactory;
 
 public class LoginMenuAction implements Runnable {

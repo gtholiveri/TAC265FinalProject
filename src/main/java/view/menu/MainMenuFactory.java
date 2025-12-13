@@ -1,9 +1,7 @@
 package view.menu;
 
 import com.googlecode.lanterna.gui2.Window;
-import com.googlecode.lanterna.gui2.dialogs.ActionListDialog;
-import com.googlecode.lanterna.gui2.dialogs.ActionListDialogBuilder;
-import controller.actions.PageRankApp;
+import controller.PageRankApp;
 import controller.actions.main.LogoutAction;
 
 public class MainMenuFactory {

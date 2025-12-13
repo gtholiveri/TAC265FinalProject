@@ -2,7 +2,9 @@ package model.user;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String username;
     private String passwordHash;
 //    Library library;

@@ -1,7 +1,6 @@
 package model.persistence;
 
 import model.user.User;
-import view.old.Printer;
 
 import java.io.*;
 import java.util.HashMap;
