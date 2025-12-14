@@ -1,5 +1,6 @@
 package view;
 
+import com.googlecode.lanterna.bundle.LanternaThemes;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.screen.Screen;
@@ -33,6 +34,7 @@ public class GUIManager {
             Screen scr = new TerminalScreen(t);
             scr.startScreen();
             gui = new MultiWindowTextGUI(scr);
+            gui.setTheme(LanternaThemes.getRegisteredTheme("defrost"));
 
         } catch (IOException e) {
             throw new RuntimeException(e);

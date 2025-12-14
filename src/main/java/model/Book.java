@@ -1,12 +1,8 @@
 package model;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 import static model.persistence.BookDatabaseManager.assertValidLoadPathname;
 
@@ -45,5 +41,10 @@ public class Book implements Serializable {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

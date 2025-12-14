@@ -7,22 +7,20 @@ import view.menu.OptionListWindowBuilder;
 public class TitleMenuFactory {
 
     public static Window create() {
-        PageRankApp app = PageRankApp.getInstance();
-
         String title = "Welcome to PageRank!";
         String subtitle = "Log in or create an account to continue.";
         OptionListWindowBuilder b = new OptionListWindowBuilder(title, subtitle);
 
         b.addAction("Log In", () -> {
-            app.transitionTo(LoginMenuFactory.create());
+            PageRankApp.getInstance().transitionTo(LoginMenuFactory.create());
         });
 
         b.addAction("Create New Account", () -> {
-            app.transitionTo(CreateAccountMenuFactory.create());
+            PageRankApp.getInstance().transitionTo(CreateAccountMenuFactory.create());
         });
 
         b.addAction("Exit", () -> {
-            app.exit();
+            PageRankApp.getInstance().exit();
         });
 
         return b.build();

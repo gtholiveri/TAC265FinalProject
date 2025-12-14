@@ -8,7 +8,6 @@ import view.menu.title.TitleMenuFactory;
 
 public class MainMenuFactory {
 
-
     public static Window create() {
         PageRankApp app = PageRankApp.getInstance();
 

@@ -52,4 +52,9 @@ public class User implements Serializable {
     public List<Book> getBooks() {
         return books;
     }
+
+    @Override
+    public String toString() {
+        return getUsername();
+    }
 }

@@ -9,6 +9,8 @@ import com.googlecode.lanterna.terminal.Terminal;
 import controller.PageRankApp;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static com.googlecode.lanterna.gui2.Window.Hint.CENTERED;
@@ -181,6 +183,82 @@ public class Main {
 
         window.setComponent(contentPanel);
         gui.addWindowAndWait(window);
+        // clean up
+        try {
+            scr.stopScreen();
+            t.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void textBoxScrollTest() {
+        DefaultTerminalFactory factory = new DefaultTerminalFactory();
+
+        // initialize
+        Terminal t;
+        Screen scr;
+        try {
+            t = factory.createTerminal();
+            scr = new TerminalScreen(t);
+            scr.startScreen();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Load Jekyll and Hyde text
+        final String bookText;
+        try {
+            bookText = Files.readString(Paths.get("jekyll and hyde.txt"));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load Jekyll and Hyde text", e);
+        }
+
+        // do stuff
+        MultiWindowTextGUI gui = new MultiWindowTextGUI(scr);
+        BasicWindow window = new BasicWindow("TextBox Scroll Test");
+        window.setHints(Arrays.asList(Window.Hint.EXPANDED));
+
+        Panel panel = new Panel(new LinearLayout(Direction.VERTICAL));
+
+        // Create scrollable text box (similar to ReaderMenuFactory)
+        com.googlecode.lanterna.TerminalSize termSize = new com.googlecode.lanterna.TerminalSize(80, 20);
+        TextBox textBox = new TextBox(termSize, bookText, TextBox.Style.MULTI_LINE);
+        textBox.setReadOnly(true);
+        textBox.setVerticalFocusSwitching(false);
+        textBox.setHorizontalFocusSwitching(false);
+
+        // Add button to test getViewTopLeft()
+        Button testButton = new Button("Test getViewTopLeft()", () -> {
+            try {
+                java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("textbox_view_log.txt", true));
+                pw.println("=== getViewTopLeft() Test at " + java.time.LocalDateTime.now() + " ===");
+
+                // Get the renderer and call getViewTopLeft()
+                com.googlecode.lanterna.TerminalPosition viewTopLeft = textBox.getRenderer().getViewTopLeft();
+
+                pw.println("View Top Left Position: " + viewTopLeft);
+                pw.println("  Column: " + viewTopLeft.getColumn());
+                pw.println("  Row: " + viewTopLeft.getRow());
+                pw.println("======================\n");
+                pw.close();
+            } catch (Exception e) {
+                try {
+                    java.io.PrintWriter errorPw = new java.io.PrintWriter(new java.io.FileWriter("textbox_view_log.txt", true));
+                    errorPw.println("ERROR: " + e.getMessage());
+                    e.printStackTrace(errorPw);
+                    errorPw.close();
+                } catch (Exception ignored) {}
+            }
+        });
+
+        panel.addComponent(textBox);
+        panel.addComponent(testButton);
+        panel.addComponent(new Button("Exit", window::close));
+
+        window.setComponent(panel);
+        gui.addWindowAndWait(window);
+
         // clean up
         try {
             scr.stopScreen();

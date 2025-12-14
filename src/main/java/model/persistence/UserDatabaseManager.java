@@ -3,54 +3,61 @@ package model.persistence;
 import model.user.User;
 
 import java.io.*;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-
-@SuppressWarnings("unused")
 public class UserDatabaseManager {
-    public static final String DB_FILE = "data/users.ser";
+    private static final String DB_FILE = "data/users.ser";
+    private static final Map<String, User> users = loadUsers();
 
-    public static void saveAllUsers(Map<String, User> users) {
-        writeUsersTo(users, DB_FILE);
-    }
-
-    public static Map<String, User> readAllUsers() {
-        return readUsersFrom(DB_FILE);
-    }
-
-    private static Map<String, User> readUsersFrom(String filename) {
-
-        Map<String, User> users = new HashMap<>();
-        try (FileInputStream fs = new FileInputStream(filename);
+    // Static initializer - loads all users immediately
+    private static Map<String, User> loadUsers() {
+        Map<String, User> loadedUsers = new HashMap<>();
+        try (FileInputStream fs = new FileInputStream(DB_FILE);
              ObjectInputStream objInStream = new ObjectInputStream(fs)) {
             Object obj = objInStream.readObject();
             if (obj instanceof Map) {
                 //noinspection unchecked
-                users = (Map<String, User>) obj; // if the thing we read was in fact a map, cast it and store it
+                loadedUsers = (Map<String, User>) obj;
             }
         } catch (FileNotFoundException e) {
-            //can ignore exception if no file found, since that just means we'll return a blank map
+            // Can ignore - means no existing data file, return empty map
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error loading users from " + DB_FILE, e);
         }
-
-        return users;
+        return loadedUsers;
     }
 
-    public static void writeUsersTo(Map<String, User> users, String fileName) {
-        //for this to work, the users MUST (implement) Serializable, which means it can be written to a file
-        // anything with a Scanner or BFF as instance variable can not be serializable.
+    // Public API methods
+    public static User getUser(String username) {
+        return users.get(username);
+    }
 
-        try (FileOutputStream fs = new FileOutputStream(fileName)) {
-            ObjectOutputStream os = new ObjectOutputStream(fs);
-            os.writeObject(users); //write the users to a file in a machine-readable way
-            os.close();
-        } catch (FileNotFoundException e) {
-            System.err.println("Error: Could not find file " + fileName);
-            throw new RuntimeException(e);
+    public static boolean userExists(String username) {
+        return users.containsKey(username);
+    }
+
+    public static Collection<User> getAllUsers() {
+        return users.values();
+    }
+
+    public static void addUser(User user) {
+        users.put(user.getUsername(), user);
+        save();
+    }
+
+    public static void removeUser(String username) {
+        users.remove(username);
+        save();
+    }
+
+    public static void save() {
+        try (FileOutputStream fs = new FileOutputStream(DB_FILE);
+             ObjectOutputStream os = new ObjectOutputStream(fs)) {
+            os.writeObject(users);
         } catch (IOException e) {
-            System.err.println("Error: Could not write to file " + fileName + ". Error: " + e.getMessage());
+            System.err.println("Error: Could not write to file " + DB_FILE + ". Error: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

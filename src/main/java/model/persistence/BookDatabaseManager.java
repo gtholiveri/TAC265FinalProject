@@ -16,42 +16,18 @@ public class BookDatabaseManager {
     private static final String BOOK_DB_FILE = BOOK_OBJECT_DIR + "/books.ser";
 
 
-    public static Book getBook(String title) {
-        return loadBooks().get(title);
+    public static void saveBook(Book b) {
+        Map<String, Book> books = loadBooks();
+        books.put(b.getTitle(), b);
+        saveBooks(books);
     }
 
     public static boolean bookExists(String title) {
         return loadBooks().containsKey(title);
     }
 
-    public static String assertValidImportPathname(String importPathname) throws FileNotFoundException {
-        Path path = Paths.get(importPathname);
-
-        if (!Files.exists(path)) {
-            throw new FileNotFoundException("File does not exist: " + importPathname);
-        }
-
-        if (!importPathname.endsWith(".txt")) {
-            throw new IllegalArgumentException("File must be a .txt file: " + importPathname);
-        }
-
-        return importPathname;
-    }
-
-    public static String assertValidLoadPathname(String loadPathname) {
-        if (!loadPathname.endsWith(".txt")) {
-            throw new IllegalArgumentException("File must be a .txt file: " + loadPathname);
-        }
-
-        if (!loadPathname.startsWith(BOOK_TEXT_DIR)) {
-            throw new IllegalArgumentException("File must be in the books directory: " + loadPathname);
-        }
-
-        if (!Files.exists(Paths.get(loadPathname))) {
-            throw new IllegalArgumentException("File does not exist: " + loadPathname);
-        }
-
-        return loadPathname;
+    public static Book getBook(String title) {
+        return loadBooks().get(title);
     }
 
     public static Book importBook(String title, String importPathname) throws FileNotFoundException {
@@ -82,28 +58,38 @@ public class BookDatabaseManager {
         return newBook;
     }
 
-    public static Map<String, Book> loadBooks() {
-        Map<String, Book> books = new HashMap<>();
-        try (FileInputStream fs = new FileInputStream(BOOK_DB_FILE);
-             ObjectInputStream is = new ObjectInputStream(fs)) {
-            Object obj = is.readObject();
-            if (obj instanceof Map) {
-                //noinspection unchecked
-                books = (Map<String, Book>) obj;
-            }
-        } catch (FileNotFoundException e) {
-            // No file yet — return empty map
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+    //<editor-fold> desc="Checking Validity"
+    public static String assertValidImportPathname(String importPathname) throws FileNotFoundException {
+        Path path = Paths.get(importPathname);
+
+        if (!Files.exists(path)) {
+            throw new FileNotFoundException("File does not exist: " + importPathname);
         }
-        return books;
+
+        if (!importPathname.endsWith(".txt")) {
+            throw new IllegalArgumentException("File must be a .txt file: " + importPathname);
+        }
+
+        return importPathname;
     }
 
-    public static void saveBook(Book b) {
-        Map<String, Book> books = loadBooks();
-        books.put(b.getTitle(), b);
-        saveBooks(books);
+    public static String assertValidLoadPathname(String loadPathname) {
+        if (!loadPathname.endsWith(".txt")) {
+            throw new IllegalArgumentException("File must be a .txt file: " + loadPathname);
+        }
+
+        if (!loadPathname.startsWith(BOOK_TEXT_DIR)) {
+            throw new IllegalArgumentException("File must be in the books directory: " + loadPathname);
+        }
+
+        if (!Files.exists(Paths.get(loadPathname))) {
+            throw new IllegalArgumentException("File does not exist: " + loadPathname);
+        }
+
+        return loadPathname;
     }
+    //</editor-fold>
+
 
     private static void saveBooks(Map<String, Book> books) {
         // Make sure the directory exists
@@ -125,4 +111,24 @@ public class BookDatabaseManager {
             throw new RuntimeException(e);
         }
     }
+
+    private static Map<String, Book> loadBooks() {
+        Map<String, Book> books = new HashMap<>();
+        try (FileInputStream fs = new FileInputStream(BOOK_DB_FILE);
+             ObjectInputStream is = new ObjectInputStream(fs)) {
+            Object obj = is.readObject();
+            if (obj instanceof Map) {
+                //noinspection unchecked
+                books = (Map<String, Book>) obj;
+            }
+        } catch (FileNotFoundException e) {
+            // No file yet — return empty map
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return books;
+
+    }
+
+
 }
