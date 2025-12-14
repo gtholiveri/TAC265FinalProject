@@ -5,10 +5,10 @@ import com.googlecode.lanterna.gui2.TextBox;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import controller.exceptions.IncorrectPasswordException;
-import controller.exceptions.NoSuchUserException;
+import controller.exceptions.NoSuchElementException;
 import controller.PageRankApp;
 
-public class LoginSubmitAction implements Runnable {
+public class SubmitLoginAction implements Runnable {
     private final TextBox usernameBox;
     private final TextBox passwordBox;
 
@@ -18,7 +18,7 @@ public class LoginSubmitAction implements Runnable {
      * because if we pass in the result, we're calling the method at window creation time and
      * the result will always be empty
      */
-    public LoginSubmitAction(TextBox usernameBox, TextBox passwordBox) {
+    public SubmitLoginAction(TextBox usernameBox, TextBox passwordBox) {
         this.usernameBox = usernameBox;
         this.passwordBox = passwordBox;
     }
@@ -39,7 +39,7 @@ public class LoginSubmitAction implements Runnable {
 
         try {
             app.logInUser(username, password);
-        } catch (NoSuchUserException e) {
+        } catch (NoSuchElementException e) {
             MessageDialog.showMessageDialog(
                     gui,
                     "Login Failed",

@@ -1,9 +1,9 @@
 package controller.actions.title;
 
 import controller.PageRankApp;
-import view.menu.LoginMenuFactory;
+import view.menu.title.LoginMenuFactory;
 
-public class LoginMenuAction implements Runnable {
+public class OpenLoginAction implements Runnable {
 
     /**
      * - Transitions to the login window<br>

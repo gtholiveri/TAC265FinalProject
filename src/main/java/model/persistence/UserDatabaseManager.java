@@ -35,7 +35,6 @@ public class UserDatabaseManager {
             throw new RuntimeException(e);
         }
 
-
         return users;
     }
 

@@ -1,21 +1,29 @@
-package view.menu;
+package view.menu.title;
 
 import com.googlecode.lanterna.gui2.Window;
-import controller.actions.title.CreateAccountMenuAction;
-import controller.actions.title.CreateAccountSubmitAction;
-import controller.actions.title.ExitAction;
-import controller.actions.title.LoginMenuAction;
+import controller.PageRankApp;
+import view.menu.OptionListWindowBuilder;
 
 public class TitleMenuFactory {
 
     public static Window create() {
+        PageRankApp app = PageRankApp.getInstance();
+
         String title = "Welcome to PageRank!";
         String subtitle = "Log in or create an account to continue.";
         OptionListWindowBuilder b = new OptionListWindowBuilder(title, subtitle);
 
-        b.addAction("Log In", new LoginMenuAction());
-        b.addAction("Create New Account", new CreateAccountMenuAction());
-        b.addAction("Exit", new ExitAction());
+        b.addAction("Log In", () -> {
+            app.transitionTo(LoginMenuFactory.create());
+        });
+
+        b.addAction("Create New Account", () -> {
+            app.transitionTo(CreateAccountMenuFactory.create());
+        });
+
+        b.addAction("Exit", () -> {
+            app.exit();
+        });
 
         return b.build();
     }

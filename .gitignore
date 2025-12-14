@@ -50,4 +50,4 @@ gradlew
 /journal/log1.txt
 /journal/*
 /error_log.txt
-/data/users.ser
+/data/*

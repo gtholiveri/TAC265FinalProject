@@ -4,14 +4,14 @@ import com.googlecode.lanterna.gui2.TextBox;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import controller.PageRankApp;
-import controller.exceptions.UsernameTakenException;
+import controller.exceptions.NameTakenException;
 import model.user.User;
 
-public class CreateAccountSubmitAction implements Runnable {
+public class SubmitCreateAccountAction implements Runnable {
     TextBox usernameBox;
     TextBox passwordBox;
 
-    public CreateAccountSubmitAction(TextBox usernameBox, TextBox passwordBox) {
+    public SubmitCreateAccountAction(TextBox usernameBox, TextBox passwordBox) {
         this.usernameBox = usernameBox;
         this.passwordBox = passwordBox;
     }
@@ -42,7 +42,7 @@ public class CreateAccountSubmitAction implements Runnable {
 
         try {
             app.addUser(newUser);
-        } catch (UsernameTakenException e) {
+        } catch (NameTakenException e) {
             MessageDialog.showMessageDialog(
                     app.guiManager.getGUI(),
                     "Create Account Failed",

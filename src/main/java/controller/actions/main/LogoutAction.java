@@ -1,7 +1,7 @@
 package controller.actions.main;
 
 import controller.PageRankApp;
-import view.menu.TitleMenuFactory;
+import view.menu.title.TitleMenuFactory;
 
 public class LogoutAction implements Runnable {
 

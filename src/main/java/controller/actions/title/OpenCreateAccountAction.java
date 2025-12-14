@@ -1,9 +1,9 @@
 package controller.actions.title;
 
 import controller.PageRankApp;
-import view.menu.CreateAccountMenuFactory;
+import view.menu.title.CreateAccountMenuFactory;
 
-public class CreateAccountMenuAction implements Runnable {
+public class OpenCreateAccountAction implements Runnable {
 
 
     @Override

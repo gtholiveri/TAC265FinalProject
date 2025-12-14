@@ -2,8 +2,8 @@ package controller;
 
 import com.googlecode.lanterna.gui2.Window;
 import controller.exceptions.IncorrectPasswordException;
-import controller.exceptions.NoSuchUserException;
-import controller.exceptions.UsernameTakenException;
+import controller.exceptions.NoSuchElementException;
+import controller.exceptions.NameTakenException;
 import model.persistence.UserDatabaseManager;
 import model.user.User;
 import view.GUIManager;
@@ -78,10 +78,10 @@ public class PageRankApp {
         guiManager.start();
     }
 
-    public void logInUser(String username, String password) throws NoSuchUserException, IncorrectPasswordException {
+    public void logInUser(String username, String password) throws NoSuchElementException, IncorrectPasswordException {
         // nonexistent user
         if (!userExists(username)) {
-            throw new NoSuchUserException("User does not exist: " + username);
+            throw new NoSuchElementException("User does not exist: " + username);
         }
 
         // incorrect password
@@ -96,13 +96,14 @@ public class PageRankApp {
         transitionTo(MainMenuFactory.create());
     }
 
-    public void addUser(User newUser) throws UsernameTakenException {
+    public void addUser(User newUser) throws NameTakenException {
         if (userExists(newUser.getUsername())) {
-            throw new UsernameTakenException("User already exists: " + newUser.getUsername());
+            throw new NameTakenException("User already exists: " + newUser.getUsername());
         }
 
         // valid username (and the username and password guaranteed to be non-empty by the action
         users.put(newUser.getUsername(), newUser);
+        this.currentUser = newUser;
         save();
 
         transitionTo(MainMenuFactory.create());

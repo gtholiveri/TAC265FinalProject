@@ -7,9 +7,10 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
-import view.menu.TitleMenuFactory;
+import view.menu.title.TitleMenuFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,7 +57,13 @@ public class GUIManager {
     }
 
     public void stop() {
-        gui.getWindows().iterator().forEachRemaining(Window::close);
+        // make a copy and iterate backwards just to be safe
+        // since I've been fighting with concurrent modification exceptions
+        List<Window> windowsToClose = new ArrayList<>(gui.getWindows());
+
+        for (int i = windowsToClose.size() - 1; i >= 0; i--) {
+            windowsToClose.get(i).close();
+        }
     }
 
     public void transitionTo(Window newWindow) {

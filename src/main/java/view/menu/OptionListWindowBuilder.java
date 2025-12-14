@@ -27,10 +27,9 @@ public class OptionListWindowBuilder {
         window.setComponent(panel);
     }
 
-    public OptionListWindowBuilder addAction(String label, Runnable action) {
+    public void addAction(String label, Runnable action) {
         Button button = new Button(label, action);
         panel.addComponent(button);
-        return this;
     }
 
     public BasicWindow build() {
