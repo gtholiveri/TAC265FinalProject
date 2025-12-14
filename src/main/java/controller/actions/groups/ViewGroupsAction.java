@@ -8,6 +8,7 @@ import model.user.Group;
 import view.menu.PopupFactory;
 import view.menu.groups.GroupDetailMenuFactory;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,7 +22,7 @@ public class ViewGroupsAction implements Runnable {
         MultiWindowTextGUI gui = app.guiManager.getGUI();
 
         // Get all groups that the user is a member of
-        Set<Group> userGroups = GroupDatabaseManager.getGroupsForUser(app.getCurrentUser());
+        List<Group> userGroups = GroupDatabaseManager.getGroupsForUser(app.getCurrentUser());
 
         // they have no groups: popup
         if (userGroups.isEmpty()) {

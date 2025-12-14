@@ -5,6 +5,9 @@ import controller.PageRankApp;
 import controller.actions.title.SubmitLoginAction;
 import view.menu.TextBoxListWindowBuilder;
 
+/**
+ * Factory for the login form window
+ */
 public class LoginMenuFactory {
 
 

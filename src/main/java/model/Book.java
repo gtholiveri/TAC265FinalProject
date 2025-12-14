@@ -6,6 +6,9 @@ import java.nio.file.Paths;
 
 import static model.persistence.BookDatabaseManager.assertValidLoadPathname;
 
+/**
+ * Represents a book with a title, persistent file path that points to its saved .txt source, and reading position (was going to use that for progress tracking but didn't have time)
+ */
 public class Book implements Serializable {
     private String persistentPath;
     private String title;

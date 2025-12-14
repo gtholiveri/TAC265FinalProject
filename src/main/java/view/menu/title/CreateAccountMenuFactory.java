@@ -5,6 +5,9 @@ import controller.PageRankApp;
 import controller.actions.title.SubmitCreateAccountAction;
 import view.menu.TextBoxListWindowBuilder;
 
+/**
+ * Factory for the account creation form window
+ */
 public class CreateAccountMenuFactory {
 
     public static Window create() {
@@ -15,6 +18,8 @@ public class CreateAccountMenuFactory {
         b.addTextBox("Password:", 20, true);
 
 
+        // it's a little jank but it saved us lines in the long run
+        // since we got to use the builder
         TextBox usernameBox = b.getTextBox(0);
         TextBox passwordBox = b.getTextBox(1);
 

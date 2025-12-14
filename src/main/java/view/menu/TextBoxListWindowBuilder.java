@@ -8,8 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Builder for creating windows with a list of labeled text boxes and buttons.
- * Useful for login forms, account creation forms, and data entry dialogs.
+ * Builder for creating windowed forms with a mix of textbox and button inputs
+ * The design for this I basically just ripped by reading through a bunch of the lanternan source
+ * code since it struck me as clever and quite convenient, and it ended up saving me a *ton* of boilerplate
  */
 public class TextBoxListWindowBuilder {
     private BasicWindow window;
@@ -19,6 +20,10 @@ public class TextBoxListWindowBuilder {
 
     private List<TextBox> textBoxes = new ArrayList<>();
 
+    /**
+     * This constructor basically just initializes all the top-level lanterna components and stuffs them in instance variables so the later actual builder methods can mutate them
+     * @param title
+     */
     public TextBoxListWindowBuilder(String title) {
         window = new BasicWindow(title);
         window.setHints(Arrays.asList(Window.Hint.EXPANDED));
@@ -35,10 +40,10 @@ public class TextBoxListWindowBuilder {
     }
 
     /**
-     * Adds a text field to the form.
+     * Adds a text field to the form
      *
-     * @param label  The label to display next to the field
-     * @param width  The width of the text box in characters
+     * @param label  Label that goes next to the field
+     * @param width  Width of text box (chars)
      * @param masked Whether to mask the input (for passwords)
      */
     public void addTextBox(String label, int width, boolean masked) {
@@ -52,19 +57,13 @@ public class TextBoxListWindowBuilder {
     }
 
     /**
-     * Adds a button to the form.
-     * Can be called before or after build().
-     *
-     * @param label  The button label
-     * @param action The action to execute when clicked
+     * Adds button to the form
      */
     public void addButton(String label, Runnable action) {
         buttonPanel.addComponent(new Button(label, action));
     }
 
     /**
-     * Builds the window with all specified fields and buttons.
-     *
      * @return The constructed window
      */
     public Window build() {
@@ -72,22 +71,12 @@ public class TextBoxListWindowBuilder {
     }
 
     /**
-     * Gets a text box by its index (in the order fields were added).
-     *
-     * @param index The field index
-     * @return The text box at that index
+     * Gets a text box by its index (order they were added)<br>
+     * This is useful since sometimes we want to use this form and also pass its text boxes
+     * to encapsulated actions that need to evaluate the box at press time
      */
     public TextBox getTextBox(int index) {
         return textBoxes.get(index);
-    }
-
-    /**
-     * Gets all text boxes.
-     *
-     * @return A copy of the text box list
-     */
-    public List<TextBox> getTextBoxes() {
-        return new ArrayList<>(textBoxes);
     }
 
 }

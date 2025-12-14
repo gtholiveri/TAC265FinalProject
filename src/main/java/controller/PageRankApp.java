@@ -10,6 +10,11 @@ import model.user.User;
 import view.GUIManager;
 import view.menu.MainMenuFactory;
 
+/**
+ * Main application controller. Used Singleton pattern which was great since I didn't
+ * have to pass it around a bajillion times<br>
+ * Manages holds and communicates between the window state, user state / auth, and data layers
+ */
 public class PageRankApp {
     public static void main(String[] args) {
     }
@@ -72,6 +77,11 @@ public class PageRankApp {
         transitionTo(MainMenuFactory.create());
     }
 
+    /**
+     * I felt like this method should be here instead of the database manager because it directly mutates the current user
+     * But idk this is one of those points where separation of concerns gets kind of fuzzy to me
+     * @throws NameTakenException If the user we're trying to add's username already exists
+     */
     public void addUser(User newUser) throws NameTakenException {
         if (UserDatabaseManager.userExists(newUser.getUsername())) {
             throw new NameTakenException("User already exists: " + newUser.getUsername());

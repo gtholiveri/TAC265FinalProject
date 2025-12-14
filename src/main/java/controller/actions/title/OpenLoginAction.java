@@ -3,13 +3,13 @@ package controller.actions.title;
 import controller.PageRankApp;
 import view.menu.title.LoginMenuFactory;
 
+/**
+ * Action for when the user wants to login
+ */
 public class OpenLoginAction implements Runnable {
 
     /**
-     * - Transitions to the login window<br>
-     * - Prompts the user for username and password<br>
-     * - If credentials are valid, transition to the main menu<br>
-     * - Otherwise, display an error message
+     * Transitions to the login window
      */
     @Override
     public void run() {

@@ -6,6 +6,9 @@ import view.menu.groups.GroupsMenuFactory;
 import view.menu.library.LibraryMenuFactory;
 import view.menu.title.TitleMenuFactory;
 
+/**
+ * The factory for the main menu window
+ */
 public class MainMenuFactory {
 
     public static Window create() {
@@ -14,6 +17,8 @@ public class MainMenuFactory {
         String title = "Main Menu — Logged in as " + app.getCurrentUser().getUsername();
         OptionListWindowBuilder b = new OptionListWindowBuilder(title);
 
+        // basically we add all the buttons with all the proper actions that
+        // take us to various menus
         b.addAction("Library", () -> {
             app.transitionTo(LibraryMenuFactory.create());
         });

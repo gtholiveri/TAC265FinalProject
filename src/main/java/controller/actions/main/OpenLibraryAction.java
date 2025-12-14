@@ -3,8 +3,10 @@ package controller.actions.main;
 import controller.PageRankApp;
 import view.menu.library.LibraryMenuFactory;
 
+/**
+ * Action for when user wants to open library. Transitions to new library menu.
+ */
 public class OpenLibraryAction implements Runnable {
-
 
     @Override
     public void run() {

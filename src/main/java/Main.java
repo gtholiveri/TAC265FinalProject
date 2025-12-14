@@ -22,6 +22,11 @@ public class Main {
     }
 
     private static void runApp() {
+        // the try catch with the weird printwriter is so we can
+        // actually see the stacktrace, since obviously lanterna using up the terminal
+        // makes it tricky to just go stdout
+        // so we have a log file we look at
+        // disclosure: this was not my idea, I had to look it up
         try {
             PageRankApp.getInstance().execute();
         } catch (Throwable e) {

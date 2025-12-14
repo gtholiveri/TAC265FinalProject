@@ -6,17 +6,23 @@ import model.user.Group;
 import model.user.User;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
+/**
+ * Persistence manager for groups
+ */
 public class GroupDatabaseManager {
-    private static final String DB_FILE = "data/groups.ser";
+    private static final String DB_FILE = "data/groups/groups.ser";
+    // kind of chose eventually to make this class the single source of truth for groups
+    // since we were eventually having to like update things in multiple places and that was an antipattern and a half
     private static final Map<String, Group> groups = loadGroups();
 
-    // Static initializer - loads all groups immediately
+
+    /**
+     * The big loading method that deserializes the whole map of users
+     */
     private static Map<String, Group> loadGroups() {
         Map<String, Group> loadedGroups = new HashMap<>();
         try (FileInputStream fs = new FileInputStream(DB_FILE);
@@ -27,26 +33,24 @@ public class GroupDatabaseManager {
                 loadedGroups = (Map<String, Group>) obj;
             }
         } catch (FileNotFoundException e) {
-            // Can ignore - means no existing data file, return empty map
+            // Can ignore, no existing data file: return empty map
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error loading groups from " + DB_FILE, e);
         }
         return loadedGroups;
     }
 
-    // Public API methods
-    public static Group getGroup(String name) {
-        return groups.get(name);
-    }
-
+    /**
+     * @return True if the group already exists, false otherwise
+     */
     public static boolean groupExists(String name) {
         return groups.containsKey(name);
     }
 
-    public static Collection<Group> getAllGroups() {
-        return groups.values();
-    }
 
+    /**
+     * Adds in a group and saves it
+     */
     public static void addGroup(Group group) {
         groups.put(group.getName(), group);
         save();
@@ -66,13 +70,30 @@ public class GroupDatabaseManager {
         return group;
     }
 
-    public static Set<Group> getGroupsForUser(User user) {
-        return groups.values().stream()
-                .filter(group -> group.isMember(user.getUsername()))
-                .collect(Collectors.toSet());
+    /**
+     * Gets all groups that a particular user is a member of
+     */
+    public static List<Group> getGroupsForUser(User user) {
+        List<Group> userGroups = new ArrayList<>();
+        for (Group group : groups.values()) {
+            if (group.isMember(user.getUsername())) {
+                userGroups.add(group);
+            }
+        }
+        return userGroups;
     }
 
+    /**
+     * Save the current map that's in memory to persistence
+     */
     public static void save() {
+        // Create the directory if it doesn't exist
+        try {
+            Files.createDirectories(Paths.get(DB_FILE).getParent());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create groups directory", e);
+        }
+
         try (FileOutputStream fs = new FileOutputStream(DB_FILE);
              ObjectOutputStream os = new ObjectOutputStream(fs)) {
             os.writeObject(groups);

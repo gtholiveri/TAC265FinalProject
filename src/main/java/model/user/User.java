@@ -11,14 +11,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The User class! Represents a user
+ */
 public class User implements Serializable {
     private String username;
     private String passwordHash;
     List<Book> books;
-    // List<Group> groups;
 
     public User(String username, String password) {
         this.username = username;
+        // storing password hash more realistic, not possible to just look at the hash and know the password
+        // because sha256 is pretty cool
         this.passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
         books = new ArrayList<>();
     }
@@ -56,5 +60,18 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return getUsername();
+    }
+
+    /**
+     * Override equals to compare Users by just their username<br>
+     * Good because Group.isAdmin() compares User objects directly, and
+     * I think deserialization might screw that up? So to play it safe we use this equals.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof User)) return false;
+        User other = (User) obj;
+        return username.equals(other.username);
     }
 }

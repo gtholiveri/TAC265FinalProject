@@ -12,8 +12,15 @@ import view.menu.PopupFactory;
 
 import java.util.Arrays;
 
+/**
+ * Factory class for the group detail menu
+ */
 public class GroupDetailMenuFactory {
 
+    /**
+     * @param group The group that we're actually displaying
+     * @return The nicely laid out window
+     */
     public static Window create(Group group) {
         PageRankApp app = PageRankApp.getInstance();
 

@@ -5,6 +5,9 @@ import controller.PageRankApp;
 import controller.actions.library.ChooseBookFileAction;
 import view.menu.TextBoxListWindowBuilder;
 
+/**
+ * Factory for the book import form window
+ */
 public class BookImportMenuFactory {
 
     public static Window create() {

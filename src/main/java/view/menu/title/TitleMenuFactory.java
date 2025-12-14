@@ -4,6 +4,9 @@ import com.googlecode.lanterna.gui2.Window;
 import controller.PageRankApp;
 import view.menu.OptionListWindowBuilder;
 
+/**
+ * Factory for the welcome/title screen window
+ */
 public class TitleMenuFactory {
 
     public static Window create() {

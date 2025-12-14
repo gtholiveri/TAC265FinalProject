@@ -9,14 +9,21 @@ import view.menu.OptionListWindowBuilder;
 
 import java.util.List;
 
+/**
+ * Factory class for the library menu window
+ */
 public class LibraryMenuFactory {
 
     public static Window create() {
+        // snag our various fields that we want easy access to
         PageRankApp app = PageRankApp.getInstance();
         User currUser = app.getCurrentUser();
         List<Book> books = currUser.getBooks();
 
         String title = "Library";
+        // user our custom option list window builder
+        // to add an option with the right action (open a reader for the
+        // given book) for each book
         OptionListWindowBuilder b = new OptionListWindowBuilder(title);
         for (Book book : books) {
             b.addAction(book.getTitle(), () -> {

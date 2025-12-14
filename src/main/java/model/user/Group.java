@@ -3,17 +3,24 @@ package model.user;
 import model.Book;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+/**
+ * This class represents a reading group
+ */
 public class Group implements Serializable {
     private String name;
     private User adminUser;
     private Book currentBook;
     private Map<String, User> members;
 
+    /**
+     *
+     * @param name The name of the group
+     * @param adminUser The User variable pointing to the admin
+     * @param book The Book that the group is going to be reading
+     * @param users
+     */
     public Group(String name, User adminUser, Book book, Map<String, User> users) {
         this(name, adminUser, book);
         members.putAll(users);
@@ -43,9 +50,9 @@ public class Group implements Serializable {
         this.currentBook = currentBook;
     }
 
-    public Set<User> getMembers() {
+    public List<User> getMembers() {
 
-        return new HashSet<>(members.values());
+        return new ArrayList<>(members.values());
     }
 
     public void addMember(User user) {
