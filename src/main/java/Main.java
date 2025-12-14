@@ -55,9 +55,11 @@ public class Main {
             } catch (Exception ignored) {}
         }
     }
-    // new SwingTerminal(new TerminalSize(20, 40), null, null, null);
 
-
+    //<editor-fold> desc="Bunch of old  tests"
+    // these were not included in the test folder because it was weirdly impossible to get
+    // shadowJar + gradle + everything to work in there so I just did this which is less optimal
+    // but workablee
     private static void inputTest() {
         DefaultTerminalFactory factory = new DefaultTerminalFactory();
 
@@ -272,4 +274,5 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+    //</editor-fold>
 }

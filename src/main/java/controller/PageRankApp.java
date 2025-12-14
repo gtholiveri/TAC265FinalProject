@@ -16,8 +16,6 @@ import view.menu.MainMenuFactory;
  * Manages holds and communicates between the window state, user state / auth, and data layers
  */
 public class PageRankApp {
-    public static void main(String[] args) {
-    }
 
     private static PageRankApp instance = new PageRankApp();
 
